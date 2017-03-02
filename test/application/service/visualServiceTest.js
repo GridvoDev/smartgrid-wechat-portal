@@ -77,6 +77,54 @@ describe('visualConfigService use case test', () => {
             });
         });
     });
+    describe('#loadDatas(queryOpt, traceContext, callback)', () => {
+        context('load datas from data-query microservice)', () => {
+            it('return null if queryOpt no dataSourceID', done => {
+                service.loadDatas({}, {}, (err, datasJSON) => {
+                    _.isNull(datasJSON).should.be.eql(true);
+                    done();
+                });
+            });
+            it('return null if no this data source', done => {
+                let mockDataQueryServiceGateway = {};
+                mockDataQueryServiceGateway.queryData = (queryOpt, traceContext, callback) => {
+                    callback(null, null);
+                };
+                muk(service, "_dataQueryServiceGateway", mockDataQueryServiceGateway);
+                let queryOpt = {
+                    dataSourceID: "no-data-source-id"
+                };
+                service.loadDatas(queryOpt, {}, (err, datasJSON) => {
+                    _.isNull(datasJSON).should.be.eql(true);
+                    done();
+                });
+            });
+            it('return datas json', done => {
+                let mockDataQueryServiceGateway = {};
+                mockDataQueryServiceGateway.queryData = (queryOpt, traceContext, callback) => {
+                    callback(null, {
+                        dataSource: "data-source-id",
+                        startTimestamp: 1,
+                        endTimestamp: 2,
+                        datas: [{v: 100, t: 2},
+                            {v: 100, t: 3}]
+                    });
+                };
+                muk(service, "_dataQueryServiceGateway", mockDataQueryServiceGateway);
+                let queryOpt = {
+                    dataSourceID: "no-data-source-id",
+                    startTimestamp: 1,
+                    endTimestamp: 2,
+                    timespan: 1
+                };
+                service.loadDatas(queryOpt, {}, (err, datasJSON) => {
+                    datasJSON.dataSource.should.be.eql("data-source-id");
+                    datasJSON.datas.length.should.be.eql(2);
+                    done();
+                });
+            });
+        });
+    });
     after(() => {
         muk.restore();
     });
