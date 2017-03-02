@@ -19,4 +19,5 @@ spec:
         env:
         - name: ZK_TRACER_HTTP
           value: "true"
-             
+        - name: IS_DEBUG
+          value: "true"
