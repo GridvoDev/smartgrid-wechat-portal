@@ -16,8 +16,22 @@ spec:
         ports:
         - containerPort: 3150
         - containerPort: 3011
+        volumeMounts:
+        - name: keys-path
+          mountPath: "/home/keys"
+          readOnly: true
         env:
+        - name: SSL_KEY_PATH
+          value: "/home/keys/gridvocomrsa.key"
+        - name: SSL_CA_PATH
+          value: "/home/keys/1_root_bundle.crt"
+        - name: SSL_CERT_PATH
+          value: "/home/keys/1_www.gridvo.com_bundle.crt"
         - name: ZK_TRACER_HTTP
           value: "true"
         - name: IS_DEBUG
           value: "true"
+      volumes:
+      - name: keys-path
+        hostPath:
+          path: "/var/keys"

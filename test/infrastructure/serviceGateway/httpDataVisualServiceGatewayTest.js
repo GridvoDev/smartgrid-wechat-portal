@@ -17,6 +17,7 @@ describe('HttpDataVisualServiceGateway use case test', () => {
                 app = express();
                 app.use(bodyParser.json());
                 app.post('/visual-config/load', (req, res) => {
+                    console.log(req.body);
                     if (req.body.viewOptions.viewID == "view-id") {
                         res.json({
                             errcode: 0,
