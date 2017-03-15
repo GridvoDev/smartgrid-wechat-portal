@@ -1,8 +1,8 @@
 #!/bin/bash
-kubectl get svc | grep -q smartgrid-wechat-portal
+kubectl -n gridvo get svc | grep -q smartgrid-wechat-portal
 if [ "$?" == "1" ];then
 	kubectl create -f smartgrid_wechat_portal-service.yaml --record
-	kubectl get svc | grep -q smartgrid-wechat-portal
+	kubectl -n gridvo get svc | grep -q smartgrid-wechat-portal
 	if [ "$?" == "0" ];then
 		echo "smartgrid_wechat_portal-service install success!"
 	else
@@ -11,10 +11,10 @@ if [ "$?" == "1" ];then
 else
 	echo "smartgrid_wechat_portal-service is exist!"
 fi
-kubectl get pods | grep -q smartgrid-wechat-portal
+kubectl -n gridvo get pods | grep -q smartgrid-wechat-portal
 if [ "$?" == "1" ];then
 	kubectl create -f smartgrid_wechat_portal-deployment.yaml --record
-	kubectl get pods | grep -q smartgrid-wechat-portal
+	kubectl -n gridvo get pods | grep -q smartgrid-wechat-portal
 	if [ "$?" == "0" ];then
 		echo "smartgrid_wechat_portal-deployment install success!"
 	else
@@ -22,13 +22,13 @@ if [ "$?" == "1" ];then
 	fi
 else
 	kubectl delete -f smartgrid_wechat_portal-deployment.yaml
-	kubectl get pods | grep -q smartgrid-wechat-portal
+	kubectl -n gridvo get pods | grep -q smartgrid-wechat-portal
 	while [ "$?" == "0" ]
 	do
-	kubectl get pods | grep -q smartgrid-wechat-portal
+	kubectl -n gridvo get pods | grep -q smartgrid-wechat-portal
 	done
 	kubectl create -f smartgrid_wechat_portal-deployment.yaml --record
-	kubectl get pods | grep -q smartgrid-wechat-portal
+	kubectl -n gridvo get pods | grep -q smartgrid-wechat-portal
 	if [ "$?" == "0" ];then
 		echo "smartgrid_wechat_portal-deployment update success!"
 	else
