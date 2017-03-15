@@ -1,17 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  labels:
+    name: smartgrid-wechat-portal
   name: smartgrid-wechat-portal
+  namespace: gridvo
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: smartgrid-wechat-portal
+        name: smartgrid-wechat-portal
     spec:
       containers:
       - name: smartgrid-wechat-portal
-        image: 10.0.2.62:5000/gridvo/smartgrid-wechat-portal:dev
+        image: 10.0.3.31:5000/gridvo/smartgrid-wechat-portal:dev
         imagePullPolicy: Always
         ports:
         - containerPort: 3150
@@ -34,4 +37,4 @@ spec:
       volumes:
       - name: keys-path
         hostPath:
-          path: "/var/keys"
+          path: "/var/gridvo/keys"
