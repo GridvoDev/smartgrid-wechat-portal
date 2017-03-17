@@ -4,7 +4,7 @@ const should = require('should');
 const muk = require('muk');
 const VisualService = require('../../../lib/application/service/visualService');
 
-describe('visualConfigService use case test', () => {
+describe('visualService use case test', () => {
     let service;
     before(() => {
         service = new VisualService();

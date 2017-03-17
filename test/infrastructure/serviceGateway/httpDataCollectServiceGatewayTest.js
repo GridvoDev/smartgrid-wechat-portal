@@ -4,10 +4,10 @@ const co = require('co');
 const should = require('should');
 const express = require('express');
 const bodyParser = require('body-parser');
-const HttpDataVisualServiceGateway = require('../../../lib/infrastructure/serviceGateway/httpDataVisualServiceGateway');
+const HttpDataCollectServiceGateway = require('../../../lib/infrastructure/serviceGateway/httpDataCollectServiceGateway');
 const {TraceContext} = require('gridvo-common-js');
 
-describe('HttpDataVisualServiceGateway use case test', () => {
+describe('HttpDataCollectServiceGateway use case test', () => {
     let app;
     let server;
     let gateway;
@@ -16,20 +16,11 @@ describe('HttpDataVisualServiceGateway use case test', () => {
             return new Promise((resolve, reject) => {
                 app = express();
                 app.use(bodyParser.json());
-                app.post('/visual-config/load', (req, res) => {
-                    if (req.body.viewOptions.viewID == "view-id") {
+                app.post('/data-sources/:dataSourceID/update-config', (req, res) => {
+                    if (req.params.dataSourceID == "data-source-id") {
                         res.json({
                             errcode: 0,
                             errmsg: "ok",
-                            visualConfig: {
-                                "NWH-YL": {
-                                    readableName: "雨量",
-                                    maxValue: 5000,
-                                    minValue: 2000,
-                                    interval: 500,
-                                    splitNumber: 6
-                                }
-                            }
                         });
                     }
                     else {
@@ -52,13 +43,13 @@ describe('HttpDataVisualServiceGateway use case test', () => {
             yield setupExpress();
         };
         co(setup).then(() => {
-            gateway = new HttpDataVisualServiceGateway();
+            gateway = new HttpDataCollectServiceGateway();
             done();
         }).catch(err => {
             done(err);
         });
     });
-    describe('loadVisualConfig(viewOptions, dataTypeConfigs, traceContext, callback)', () => {
+    describe('updateDataSourceConfig(dataSourceID, configs, traceContext, callback)', () => {
         let traceContext = new TraceContext({
             traceID: "aaa",
             parentID: "bbb",
@@ -66,44 +57,30 @@ describe('HttpDataVisualServiceGateway use case test', () => {
             flags: 1,
             step: 3
         });
-        context('load visual config)', () => {
-            it('should return null if load fail', done => {
-                let viewOptions = {
-                    viewID: "no-view-id",
-                    viewUserID: "viewUserID",
-                    level: "station"
+        context('update data source config)', () => {
+            it('should return false if update fail', done => {
+                let dataSourceID = "no-data-source";
+                let configs = {
+                    FWJ: 60
                 };
-                let dataTypeConfigs = {
-                    YL: {
-                        readableName: "",
-                        maxValue: 5000,
-                        minValue: 2000,
-                        interval: 500,
-                        splitNumber: 6
+                gateway.updateDataSourceConfig(dataSourceID, configs, traceContext, (err, isSuccess) => {
+                    if (err) {
+                        done(err);
                     }
-                };
-                gateway.loadVisualConfig(viewOptions, dataTypeConfigs, traceContext, (err, visualConfigJSON) => {
-                    _.isNull(visualConfigJSON).should.be.eql(true);
+                    isSuccess.should.be.eql(false);
                     done();
                 });
             });
             it('is ok', done => {
-                let viewOptions = {
-                    viewID: "view-id",
-                    viewUserID: "viewUserID",
-                    level: "station"
+                let dataSourceID = "data-source-id";
+                let configs = {
+                    FWJ: 60
                 };
-                let dataTypeConfigs = {
-                    YL: {
-                        readableName: "",
-                        maxValue: 5000,
-                        minValue: 2000,
-                        interval: 500,
-                        splitNumber: 6
+                gateway.updateDataSourceConfig(dataSourceID, configs, traceContext, (err, isSuccess) => {
+                    if (err) {
+                        done(err);
                     }
-                };
-                gateway.loadVisualConfig(viewOptions, dataTypeConfigs, traceContext, (err, visualConfigJSON) => {
-                    should.exist(visualConfigJSON["NWH-YL"]);
+                    isSuccess.should.be.eql(true);
                     done();
                 });
             });
