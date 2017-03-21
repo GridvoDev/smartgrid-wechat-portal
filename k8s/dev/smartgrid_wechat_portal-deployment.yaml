@@ -24,6 +24,30 @@ spec:
           mountPath: "/home/keys"
           readOnly: true
         env:
+        - name: DATA_COLLECT_SERVICE_HOST
+          value: "data-collect"
+        - name: DATA_COLLECT_SERVICE_PORT
+          value: "80"
+        - name: DATA_QUERY_SERVICE_HOST
+          value: "data-query"
+        - name: DATA_QUERY_SERVICE_PORT
+          value: "80"
+        - name: DATA_VISUAL_SERVICE_HOST
+          value: "data-visual"
+        - name: DATA_VISUAL_SERVICE_PORT
+          value: "80"
+        - name: SMARTGRID_LESSEE_SERVICE_HOST
+          value: "smartgrid-lessee"
+        - name: SMARTGRID_LESSEE_SERVICE_PORT
+          value: "80"
+        - name: ZOOKEEPER_SERVICE_HOST
+          value: "zookeeper"
+        - name: ZOOKEEPER_SERVICE_PORT
+          value: "2181"
+        - name: ZIPKIN_SERVICE_HOST
+          value: "zipkin"
+        - name: ZIPKIN_HTTP_TRANSPORT_PORT
+          value: "9411"
         - name: SSL_KEY_PATH
           value: "/home/keys/gridvocomrsa.key"
         - name: SSL_CA_PATH

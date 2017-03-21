@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "co": "^4.6.0",
-    "gridvo-common-js": "0.0.21",
+    "gridvo-common-js": "0.0.23",
     "gridvo-microprogram-connector": "0.0.1",
     "kafka-node": "^1.6.0",
     "pomelo": "^2.2.5",

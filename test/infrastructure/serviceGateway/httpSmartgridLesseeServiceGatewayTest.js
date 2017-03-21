@@ -3,10 +3,10 @@ const _ = require('underscore');
 const co = require('co');
 const should = require('should');
 const express = require('express');
-const HttpSmartLesseeServiceGateway = require('../../../lib/infrastructure/serviceGateway/httpSmartLesseeServiceGateway');
+const HttpSmartgridLesseeServiceGateway = require('../../../lib/infrastructure/serviceGateway/httpSmartgridLesseeServiceGateway');
 const {TraceContext} = require('gridvo-common-js');
 
-describe('HttpSmartLesseeServiceGateway use case test', () => {
+describe('HttpSmartgridLesseeServiceGateway use case test', () => {
     let app;
     let server;
     let gateway;
@@ -46,7 +46,7 @@ describe('HttpSmartLesseeServiceGateway use case test', () => {
             yield setupExpress();
         };
         co(setup).then(() => {
-            gateway = new HttpSmartLesseeServiceGateway();
+            gateway = new HttpSmartgridLesseeServiceGateway();
             done();
         }).catch(err => {
             done(err);
