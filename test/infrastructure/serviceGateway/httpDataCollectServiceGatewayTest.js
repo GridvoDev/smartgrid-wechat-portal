@@ -16,6 +16,15 @@ describe('HttpDataCollectServiceGateway use case test', () => {
             return new Promise((resolve, reject) => {
                 app = express();
                 app.use(bodyParser.json());
+                app.get('/data-sources', (req, res) => {
+                    res.json({
+                        errcode: 0,
+                        errmsg: "ok",
+                        dataSources: [{
+                            id: "NWH-SW-SH"
+                        }]
+                    });
+                });
                 app.post('/data-sources/:dataSourceID/update-config', (req, res) => {
                     if (req.params.dataSourceID == "data-source-id") {
                         res.json({
@@ -47,6 +56,24 @@ describe('HttpDataCollectServiceGateway use case test', () => {
             done();
         }).catch(err => {
             done(err);
+        });
+    });
+    describe('getDataSources(queryOpts, traceContext, callback)', () => {
+        let traceContext = new TraceContext({
+            traceID: "aaa",
+            parentID: "bbb",
+            spanID: "ccc",
+            flags: 1,
+            step: 3
+        });
+        context('get data sources)', () => {
+            it('should return data sources"', done => {
+                let queryOpts = {};
+                gateway.getDataSources(queryOpts, traceContext, (err, dataSourcesJSON) => {
+                    dataSourcesJSON.length.should.be.eql(1);
+                    done();
+                });
+            });
         });
     });
     describe('updateDataSourceConfig(dataSourceID, configs, traceContext, callback)', () => {

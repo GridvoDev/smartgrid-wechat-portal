@@ -9,6 +9,22 @@ describe('visualService use case test', () => {
     before(() => {
         service = new VisualService();
     });
+    describe('#getDataSources(queryOpt, traceContext, callback)', () => {
+        context('query data source from data-collect microservice)', () => {
+            it('return dataSources', done => {
+                let mockDataCollectServiceGateway = {};
+                mockDataCollectServiceGateway.getDataSources = (queryOpt, traceContext, callback) => {
+                    callback(null, []);
+                };
+                muk(service, "_dataCollectServiceGateway", mockDataCollectServiceGateway);
+                let queryOpts = {};
+                service.getDataSources({}, {}, (err, dataSourcesJSON) => {
+                    dataSourcesJSON.length.should.be.eql(0);
+                    done();
+                });
+            });
+        });
+    });
     describe('#loadVisualConfig(viewOptions, dataTypeConfigs, traceContext, callback)', () => {
         context('load visualConfig from data-visual microservice)', () => {
             it('return null if no viewOptions or dataTypeConfigs', done => {
